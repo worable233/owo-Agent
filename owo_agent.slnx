@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="owo_agent.vcxproj" Id="2b5f9df1-c933-475f-8e80-c74d538a1613" />
+</Solution>
