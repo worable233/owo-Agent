@@ -11,7 +11,8 @@ int main(int argc, char* argv[]) {
         return owo.run(argc,argv);
     } else {
         // 失败就结束运行
-        std::cout << "[错误] 有一个严重错误导致程序意外结束运行。请前往本项目的“Github” - “问题追踪” 提交 issuse，我们将会修复。" << std::endl;
+        std::cerr << "[致命错误] 有一个严重错误导致程序意外结束运行。请前往本项目的“Github” - “问题追踪” 提交 issuse，我们将会修复。" << std::endl;
+        std::cerr << "status错误代码：" << status << std::endl;
         return status;
     }
 }

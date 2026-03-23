@@ -26,19 +26,8 @@ int app::check() {
     }
     else {
         app::log(2,"配置文件不存在!");
-        // 写入文件
-        std::ofstream file(this->config_path);
-        if (file.is_open()) {
-            log(0,"config.json 创建成功");
-            file << this->default_config.dump(4); // 格式化输出，缩进4空格
-            log(0,"config.json 写入成功" );
-            log(0,"config.json 路径" + std::string(this->config_path ));
-        }
-        else {
-            log(3,"无法创建文件");
-            return 1;
-        }
-
+        // 创建文件
+        app::saveConfig(0);
     }
     return 0;
 }

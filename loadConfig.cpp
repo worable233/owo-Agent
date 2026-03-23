@@ -16,8 +16,8 @@ bool app::loadConfig() {
     }
 
     std::ifstream file(this->config_path);
-    
-    // 再次检查文件流是否打开成功 (防止权限问题等)
+
+    // 再次检查文件是否打开成功 (防止权限问题等)
     if (file.is_open()) {
         // 尝试加载文件
         try {
