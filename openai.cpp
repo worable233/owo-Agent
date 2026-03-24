@@ -34,20 +34,28 @@ void app::createClient(httplib::SSLClient& client, const std::string& host, cons
 
 // 子函数：构建请求体
 json app::buildRequestBody(const std::string& model_name, const std::string& text, int max_tokens) {
-	// 这样就可以做到顶级控制了（强调）
-    return {
-        {"model", model_name},
-        {"messages", {
-            {"role", "user"},
-            {"content", text}
-        }},
-        {"max_tokens", max_tokens}
-    };
+    json body = json::object();
+    body["model"] = model_name;
+    body["max_tokens"] = max_tokens;
+    
+    // 正确创建 messages 数组
+    json messages = json::array();
+    json message = json::object();
+    message["role"] = "user";
+    message["content"] = text;
+    messages.push_back(message);
+    
+    body["messages"] = messages;
+    
+    return body;
 }
 
-// 子函数：发送请求
+// 子函数：发送请求（增强版）
 httplib::Result app::sendRequest(httplib::SSLClient& client, const json& body, int retry) {
     httplib::Result res;
+    
+    // 打印请求体方便调试
+    log(0, "[请求体预览] " + body.dump(2)); 
     
     for (int attempt = 1; attempt <= retry; attempt++) {
         log(0, "[请求] 尝试 " + std::to_string(attempt) + "/" + std::to_string(retry));
@@ -62,6 +70,11 @@ httplib::Result app::sendRequest(httplib::SSLClient& client, const json& body, i
         log(3, "[请求] 尝试 " + std::to_string(attempt) + " 失败: ");
         if (res) {
             log(0, "状态码 " + std::to_string(res->status));
+            
+            if (res->status != 200) {
+                log(3, "[API 错误详情] " + res->body);
+            }
+            
             // 429 或 5xx 才重试
             if (res->status == 429 || res->status >= 500) {
                 log(1, "[请求] 可重试错误，等待后重试...");
@@ -119,7 +132,7 @@ int app::openai(const std::string& text) {
 		// 从模型文件获取模型相关的
 		std::string base_url = this->model["base_url"];  // 如：https://api.openai.com
 		std::string api_key = this->model["api_key"];     // 如：sk-xxx
-		std::string model_name = this->model["name"];     // 如：gpt-4o-mini
+		std::string model_name = this->config["settings"]["use_model"];     // 如：gpt-4o-mini
 		// 从配置文件获取其他值
 		int timeout = this->config["settings"]["timeout"];     // 如：30
 		int max_tokens = this->config["settings"]["max_tokens"]; // 如：100

@@ -14,4 +14,19 @@
 - OpenAI 客户端：`openai.cpp` — 与 OpenAI API 通信封装。
 - 配置与持久化：`saveConfig.cpp` — 保存与加载用户配置。
 
-构建：在 Visual Studio 中打开 `owo_agent.slnx` 并构建。
+**克隆**
+
+输入以下命令
+```bash
+git clone https://github.com/worable233/owo_agent
+```
+**构建**
+
+输入以下命令
+```bash
+cd ./owo-agent/owo_agent   
+rm -rf build
+mkdir build && cd build      
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make 
+```
